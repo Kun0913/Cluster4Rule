@@ -37,8 +37,15 @@ X_extended = np.vstack(X_with_class)
 
 # 获取当前系统日期与时间
 current_time = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+# 获取当前脚本文件所在目录的绝对路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# 构造 "data" 目录的路径
+data_dir = os.path.join(current_dir, "../data")  # 返回上一级目录下的 "data" 目录
+# 如果 "data" 目录不存在，则创建它
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 # 定义文件名
-file_name = f"Sample{current_time}.txt"
+file_name = os.path.join(data_dir, f"Sample{current_time}.txt")
 
 # 将X按行写入到文件中，数据之间以空格分隔
 with open(file_name, 'w') as file:
