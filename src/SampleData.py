@@ -7,7 +7,7 @@ import datetime
 from SampleDatasetGeneration import generate_sample_data as Sample
 
 feature_ranges = [[0, 180], [0, 180], [-5000, 5000], [0, 350],
-                  [0, 5000],[0, 6], [0, 350], [2000, 1500],
+                  [0, 5000],[0, 6], [0, 350], [2000, 15000],
                   [0, 1], [0, 1], [0, 1],[0, 1]]
 X, y = Sample(n_samples=3000, n_features=12, centers=15, random_state=42,
               feature_ranges=feature_ranges)
