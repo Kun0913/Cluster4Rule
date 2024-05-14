@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from hopkins import Hopkins
 from data_creator import generate_clusters
 from tqdm import tqdm
+from SampleDatasetGeneration import generate_sample_data as Sample
+
 
 ## 生成具有聚类意义的数组
 # 参数设置
@@ -15,8 +17,13 @@ num_samples_per_cluster = 100  # 每个聚类中的样本数量
 num_features = 10  # 每个样本的特征数量
 random_state = 4027  # 随机数生成器的种子值
 # 生成聚类数据
-X, y = generate_clusters(num_clusters, num_samples_per_cluster,
-                         num_features, random_state)
+# X, y = generate_clusters(num_clusters, num_samples_per_cluster,
+#                          num_features, random_state)
+feature_ranges = [[0, 180], [0, 180], [-5000, 5000], [50, 350],
+                  [0, 5000],[0, 6], [0, 350], [2500, 15000],
+                  [0, 1], [0, 1], [0, 1],[0, 1]]
+X, y = Sample(n_samples=500, n_features=12, centers=3, random_state=42,
+              feature_ranges=feature_ranges)
 data = X
 print(data, y)
 
@@ -28,28 +35,32 @@ Hopkins_value = Hopkins(data)
 print(Hopkins_value)
 
 from HybridClustering import hybrid_clustering
-kmeans_labels = hybrid_clustering(data)
+if(Hopkins_value>0.55):
+    kmeans_labels = hybrid_clustering(data,2,6)
+    from WriteCluster import write_cluster_data, write_dbscan_cluster_data
+    write_cluster_data(data, kmeans_labels, "kmeans")
 
+kmeans_labels = hybrid_clustering(data,2,6)
 from WriteCluster import write_cluster_data, write_dbscan_cluster_data
 write_cluster_data(data, kmeans_labels, "kmeans")
 
-from sklearn.cluster import DBSCAN
-# 使用 DBSCAN 进行聚类
-dbscan = DBSCAN(eps=5, min_samples=5)
-with tqdm(total=100, desc="DBSCAN") as pbar:
-    dbscan_labels = dbscan.fit_predict(data)
-    pbar.update(100)
-# 获取聚类的标签
-write_dbscan_cluster_data(data, dbscan_labels, "DBSCAN")
+# from sklearn.cluster import DBSCAN
+# # 使用 DBSCAN 进行聚类
+# dbscan = DBSCAN(eps=5, min_samples=5)
+# with tqdm(total=100, desc="DBSCAN") as pbar:
+#     dbscan_labels = dbscan.fit_predict(data)
+#     pbar.update(100)
+# # 获取聚类的标签
+# write_dbscan_cluster_data(data, dbscan_labels, "DBSCAN")
 
 from boundaries import extract_boundaries
 upper_bounds, lower_bounds = extract_boundaries('cluster_0_kmeans.txt')
 print("\n")
 print("kmeans Upper boundaries:", upper_bounds)
 print("kmeans Lower boundaries:", lower_bounds)
-upper_bounds, lower_bounds = extract_boundaries('cluster_1_DBSCAN.txt')
-print("DBSCAN Upper boundaries:", upper_bounds)
-print("DBSCAN Lower boundaries:", lower_bounds)
+# upper_bounds, lower_bounds = extract_boundaries('cluster_1_DBSCAN.txt')
+# print("DBSCAN Upper boundaries:", upper_bounds)
+# print("DBSCAN Lower boundaries:", lower_bounds)
 
 # 使用 t-SNE 进行降维，将数据投影到二维空间
 tsne = TSNE(n_components=2, random_state=42)
@@ -71,15 +82,15 @@ plt.ylabel('t-SNE Component 2')
 plt.legend()
 plt.show()
 
-# 使用 t-SNE 将数据降维到二维
-tsne = TSNE(n_components=2)
-data_2d = tsne.fit_transform(data)
-
-# 绘制可视化结果
-plt.figure(figsize=(8, 6))
-plt.scatter(data_2d[:, 0], data_2d[:, 1], c=dbscan_labels, cmap='viridis', s=50, alpha=0.5)
-plt.title('t-SNE Visualization of DBSCAN Clustering')
-plt.xlabel('t-SNE Dimension 1')
-plt.ylabel('t-SNE Dimension 2')
-plt.colorbar(label='Cluster Label')
-plt.show()
+# # 使用 t-SNE 将数据降维到二维
+# tsne = TSNE(n_components=2)
+# data_2d = tsne.fit_transform(data)
+#
+# # 绘制可视化结果
+# plt.figure(figsize=(8, 6))
+# plt.scatter(data_2d[:, 0], data_2d[:, 1], c=dbscan_labels, cmap='viridis', s=50, alpha=0.5)
+# plt.title('t-SNE Visualization of DBSCAN Clustering')
+# plt.xlabel('t-SNE Dimension 1')
+# plt.ylabel('t-SNE Dimension 2')
+# plt.colorbar(label='Cluster Label')
+# plt.show()

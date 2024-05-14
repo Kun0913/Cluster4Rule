@@ -5,11 +5,11 @@ from sklearn.cluster import AgglomerativeClustering, KMeans
 from sklearn.metrics import silhouette_score
 from tqdm import tqdm
 
-def hybrid_clustering(data):
+def hybrid_clustering(data, lowerCluster, upperCluster):
     # 使用层次聚类确定簇的数量
     best_score = -1
     best_n_clusters = 0
-    for n_clusters in tqdm(range(2, 6), desc="best_n_clusters",leave=False):  # 假设簇的数量在2到5之间
+    for n_clusters in tqdm(range(lowerCluster, upperCluster), desc="best_n_clusters",leave=False):  # 假设簇的数量在2到5之间
         # 层次聚类
         clustering = AgglomerativeClustering(n_clusters=n_clusters)
         labels = clustering.fit_predict(data)
