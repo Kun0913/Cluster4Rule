@@ -1,0 +1,28 @@
+├── data/
+
+│ ├── output_state_1vs1.txt			经过处理的空战数据1v1
+
+│ ├── output_state_2vs2.txt 			经过处理的空战数据2v2
+
+│ └── result.xlsx						部分聚类提取结果
+
+│ ├── 数据解释1v1.txt				1v1空战数据的状态与动作空间
+
+│ ├── 数据解释2v2.txt				2v2空战数据的状态与动作空间
+
+│ └── Sample***.txt					先前检测算法有效性所用示例数据
+
+
+├── src/
+
+│ ├── SampleCluster.ipynb			聚类解释主流程代码
+
+│ ├── hopkins.py					Hopkins算法实现，检测数据聚类意义
+
+│ ├── HybridClustering.py			聚类算法实现：层次+Kmeans
+
+│ ├── boundaries.py					提取单一状态上下限
+
+│ └── cluster_(num)_kmeans.txt		某动作的分类结果
+
+│ └── 其它文件						先前做验证使用，已不需要
