@@ -68,6 +68,7 @@ for i, label in enumerate(y_db):
 
 # 将每个簇的数据写入到txt文件中
 for cluster_label, cluster_data in clusters_data.items():
+    
     with open(f'cluster_{cluster_label}.txt', 'w') as f:
         for sample in cluster_data:
             f.write(','.join(map(str, sample)) + '\n')
